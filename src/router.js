@@ -13,6 +13,7 @@ import EventDisplayer from "./EventDisplayer";
 import EventDisplayerStudent from "./EventDisplayerStudent";
 import InviteAttendees from "./InviteAttendees";
 import Home from './Home'
+import Map from './Map';
 
 import Start from "./Start";
 import Account from "./Account";
@@ -37,6 +38,7 @@ const Router = () => {
       <Route path="/DashTeacher" element={<DashTeacher/>} />
       <Route path="/InviteAttendees" element={<InviteAttendees/>} />
       <Route path="/ViewEventStudent" element={<EventDisplayerStudent/>} />
+      <Route path="/map" element={<Map/>} />
     </Routes>
   );
 
