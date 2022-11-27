@@ -5,6 +5,10 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import SidebarCE from "./Components/SidebarCE";
 import axios from "axios";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
 
 
 const styles = {
@@ -64,7 +68,6 @@ const Form = () => {
         method: "post",
         url: "http://localhost:3000/updateEvent",
         data: {
-          id: JSON.parse(localStorage.getItem("eventID")),
           title: formValues.title,
           details: formValues.details,
           host_email: JSON.parse(localStorage.getItem("user")),
@@ -122,17 +125,29 @@ const Form = () => {
               />
           </Grid>
           <Grid item xs={12}>
-            <TextField
-                required
-                fullWidth
-                id="location-input"
-                name="location"
-                label="Location"
-                type="text"
-                value={formValues.location}
-                onChange={handleInputChange}
-                style={styles.textfield}
-            />
+          <FormControl required sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="location-input">Location</InputLabel>
+            <Select
+              value={formValues.age}
+              id="location-input"
+              name="location"
+              label="Location"
+              type="text"
+              fullWidth
+              required
+              style={styles.textfield}
+              onChange={handleInputChange}
+            >
+              <MenuItem value={"Klaus"}>Klaus</MenuItem>
+              <MenuItem value={"CULC"}>CULC</MenuItem>
+              <MenuItem value={"Tech Green"}>Tech Green</MenuItem>
+              <MenuItem value={"CRC"}>CRC</MenuItem>
+              <MenuItem value={"Exhibition Hall"}>Exhibition Hall</MenuItem>
+              <MenuItem value={"Student Center"}>Student Center</MenuItem>
+              <MenuItem value={"Ferst Art Center"}>Ferst Art Center</MenuItem>
+              <MenuItem value={"Bobby Dodd Stadium"}>Bobby Dodd Stadium</MenuItem>
+            </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12}>
             <TextField

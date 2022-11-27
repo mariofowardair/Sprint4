@@ -1,6 +1,6 @@
 // import * as React from 'react';
 import React, {  useState, useEffect, Component } from 'react';
-import { DataGrid, GridColDef, GridApi, GridCellValue} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridApi, GridCellValue, GridToolbar } from '@mui/x-data-grid';
 import {useGridApiRef, useKeepGroupedColumnsHidden} from '@mui/x-data-grid-premium';
 import axios from "axios";
 // import Button from '@mui/material/Button';
@@ -222,13 +222,14 @@ export default function EventDisplayerStudent() {
   };
 
   var columns = [
-    { field: 'title', headerName: 'Event Title', width: 100 },
+    { field: 'title', headerName: 'Event Title', width: 200 },
     { field: 'num_attendees', headerName: 'Number Registered', width: 150 },
     { field: 'max_attendees', headerName: 'Max Capacity', width: 100 },
     {
       field: "maybe",
       headerName: "Maybe",
       sortable: false,
+      filterable: false,
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
@@ -258,6 +259,7 @@ export default function EventDisplayerStudent() {
       field: "delete",
       headerName: "Delete",
       sortable: false,
+      filterable: false,
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
@@ -285,6 +287,7 @@ export default function EventDisplayerStudent() {
       width: 80,
       headerName: "Details",
       sortable: false,
+      filterable: false,
       renderCell: (params) => {
         const [open, setOpen] = React.useState(false);
         var thisRow = {};
@@ -356,6 +359,7 @@ export default function EventDisplayerStudent() {
       field: "RSVP",
       headerName: "RSVP",
       sortable: false,
+      filterable: false,
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
@@ -385,6 +389,7 @@ export default function EventDisplayerStudent() {
       field: "delete",
       headerName: "Delete",
       sortable: false,
+      filterable: false,
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
@@ -412,6 +417,7 @@ export default function EventDisplayerStudent() {
       width: 80,
       headerName: "Details",
       sortable: false,
+      filterable: false,
       renderCell: (params) => {
         const [open, setOpen] = React.useState(false);
         var thisRow = {};
@@ -601,6 +607,7 @@ let r2 = await axios(configuration2)
           pageSize={10}
           rowsPerPageOptions={[10]}
           getRowId={(row) => row._id}
+          components={{ Toolbar: GridToolbar }}
         />
         <p>Maybe Attending Events:</p>
         <DataGrid
@@ -609,6 +616,7 @@ let r2 = await axios(configuration2)
           pageSize={10}
           rowsPerPageOptions={[10]}
           getRowId={(row) => row._id}
+          components={{ Toolbar: GridToolbar }}
         />
       </div>
     </>
