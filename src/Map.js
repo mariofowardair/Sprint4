@@ -4,7 +4,6 @@ import GoogleMapReact from "google-map-react";
 import Marker from "./Marker";
 import CustomInfoWindow from "./CustomInfoWindow";
 import axios from "axios";
-import { renderEditSingleSelectCell } from "@mui/x-data-grid";
 
 export default function Map() {
   const defaultMapSettings = {
@@ -37,10 +36,10 @@ export default function Map() {
   async function getData() {
     const configuration = {
       method: "post",
-      url: "https://yellow-campus-discovery-app.herokuapp.com/returnHostedEvent",
-      data: {
-          user: JSON.parse(localStorage.getItem("user")),
-      }
+      url: "https://yellow-campus-discovery-app.herokuapp.com/returnAllEvents",
+      // data: {
+      //     user: JSON.parse(localStorage.getItem("user")),
+      // }
       };
   console.log("CURRENT HOST:" + localStorage.getItem("user") )
   JSON.parse(localStorage.getItem("user"))
@@ -71,15 +70,9 @@ export default function Map() {
             tempLng = points[j].lng;
 
             tempArr.push({
-              id: j,
+              id: items.length,
               title: result.data[i].title,
               location: result.data[i].location,
-              details: result.data[i].details,
-              host_email: result.data[i].host_email,
-              is_invite_only: result.data[i].is_invite_only,
-              max_attendees: result.data[i].max_attendees,
-              start_time: result.data[i].start_time,
-              end_time: result.data[i].end_time,
               lat: tempLat,
               lng: tempLng
             })
@@ -135,12 +128,6 @@ export default function Map() {
                 lng={element.lng}
                 title={element.title} 
                 location={element.location}
-                details={element.details}
-                host_email={element.host_email}
-                is_invite_only={element.is_invite_only}
-                max_attendees={element.max_attendees}
-                start_time={element.start_time}
-                end_time={element.end_time}
                 showInfo={() => handleShowInfo(element)}
               />
             );
@@ -153,12 +140,6 @@ export default function Map() {
               id = {selectedCenter.id}
               title = {selectedCenter.title}
               location = {selectedCenter.location}
-              details={selectedCenter.details}
-              host_email={selectedCenter.host_email}
-              is_invite_only={selectedCenter.is_invite_only}
-              max_attendees={selectedCenter.max_attendees}
-              start_time={selectedCenter.start_time}
-              end_time={selectedCenter.end_time}
               close={() => {
                 setSelectedCenter(null);
               }}
@@ -167,13 +148,7 @@ export default function Map() {
                 lng: selectedCenter.lng,
                 id: selectedCenter.id,
                 title: selectedCenter.title,
-                location: selectedCenter.location,
-                details: selectedCenter.details,
-                host_email: selectedCenter.host_email,
-                is_invite_only: selectedCenter.is_invite_only,
-                max_attendees: selectedCenter.max_attendees,
-                start_time: selectedCenter.start_time,
-                end_time: selectedCenter.end_time
+                location: selectedCenter.location
               }}
             />
           )}
