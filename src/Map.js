@@ -4,6 +4,7 @@ import GoogleMapReact from "google-map-react";
 import Marker from "./Marker";
 import CustomInfoWindow from "./CustomInfoWindow";
 import axios from "axios";
+import { jaJP } from "@mui/material/locale";
 
 export default function Map() {
   const defaultMapSettings = {
@@ -70,11 +71,17 @@ export default function Map() {
             tempLng = points[j].lng;
 
             tempArr.push({
-              id: items.length,
+              id: j,
               title: result.data[i].title,
               location: result.data[i].location,
               lat: tempLat,
-              lng: tempLng
+              lng: tempLng,
+              details: result.data[i].details,
+              host_email: result.data[i].host_email,
+              is_invite_only: result.data[i].is_invite_only,
+              max_attendees: result.data[i].max_attendees,
+              start_time: result.data[i].start_time,
+              end_time: result.data[i].end_time,
             })
     
             console.log(tempArr)
@@ -128,6 +135,12 @@ export default function Map() {
                 lng={element.lng}
                 title={element.title} 
                 location={element.location}
+                details={element.details}
+                host_email={element.host_email}
+                is_invite_only={element.is_invite_only}
+                max_attendees={element.max_attendees}
+                start_time={element.start_time}
+                end_time={element.end_time}
                 showInfo={() => handleShowInfo(element)}
               />
             );
@@ -140,6 +153,12 @@ export default function Map() {
               id = {selectedCenter.id}
               title = {selectedCenter.title}
               location = {selectedCenter.location}
+              details={selectedCenter.details}
+              host_email={selectedCenter.host_email}
+              is_invite_only={selectedCenter.is_invite_only}
+              max_attendees={selectedCenter.max_attendees}
+              start_time={selectedCenter.start_time}
+              end_time={selectedCenter.end_time}
               close={() => {
                 setSelectedCenter(null);
               }}
@@ -148,7 +167,13 @@ export default function Map() {
                 lng: selectedCenter.lng,
                 id: selectedCenter.id,
                 title: selectedCenter.title,
-                location: selectedCenter.location
+                location: selectedCenter.location,
+                details: selectedCenter.details,
+                host_email: selectedCenter.host_email,
+                is_invite_only: selectedCenter.is_invite_only,
+                max_attendees: selectedCenter.max_attendees,
+                start_time: selectedCenter.start_time,
+                end_time: selectedCenter.end_time
               }}
             />
           )}
