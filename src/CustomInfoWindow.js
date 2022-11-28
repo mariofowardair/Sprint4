@@ -21,6 +21,18 @@ const CustomInfoWindow = ({ position, close }) => {
         <br />
         Longitude: {position.lng}
         <br />
+        Details: {position.details}
+        <br />
+        Host: {position.host_email}
+        <br />
+        Invite Only: {position.is_invite_only}
+        <br />
+        Guest Capacity: {position.max_attendees}
+        <br />
+        Start Time: {position.start_time}
+        <br />
+        End Time: {position.end_time}
+        <br />
       </p>
 
       <button type="button" onClick={close}>
