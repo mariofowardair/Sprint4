@@ -78,7 +78,7 @@ export default function Map() {
               lng: tempLng,
               details: result.data[i].details,
               host_email: result.data[i].host_email,
-              is_invite_only: result.data[i].is_invite_only,
+              is_invite_only: JSON.stringify(result.data[i].is_invite_only),
               max_attendees: result.data[i].max_attendees,
               start_time: result.data[i].start_time,
               end_time: result.data[i].end_time,
@@ -137,7 +137,7 @@ export default function Map() {
                 location={element.location}
                 details={element.details}
                 host_email={element.host_email}
-                is_invite_only={element.is_invite_only}
+                is_invite_only={JSON.stringify(element.is_invite_only)}
                 max_attendees={element.max_attendees}
                 start_time={element.start_time}
                 end_time={element.end_time}

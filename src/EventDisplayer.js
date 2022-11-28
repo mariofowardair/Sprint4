@@ -306,7 +306,7 @@ export default function EventDisplayer() {
       field: "invite",
       headerName: "Invite",
       sortable: false,
-      filterable: false,
+      filterable: true,
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
