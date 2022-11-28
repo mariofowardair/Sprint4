@@ -230,6 +230,7 @@ export default function EventDisplayer() {
   var columns = [
     { field: 'title', headerName: 'Event Title', width: 200 },
     { field: 'location', headerName: 'Location', width: 120 },
+    { field: 'is_invite_only', headerName: 'Invite Only', width: 120, filterable: true },
     {
       field: "attendees",
       width: 120,
@@ -306,7 +307,7 @@ export default function EventDisplayer() {
       field: "invite",
       headerName: "Invite",
       sortable: false,
-      filterable: true,
+      filterable: false,
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
