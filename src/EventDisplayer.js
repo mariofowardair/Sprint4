@@ -1,6 +1,6 @@
 // import * as React from 'react';
 import React, {  useState, useEffect, Component } from 'react';
-import { DataGrid, GridColDef, GridApi, GridCellValue} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridApi, GridCellValue, GridToolbar } from '@mui/x-data-grid';
 import {useGridApiRef, useKeepGroupedColumnsHidden} from '@mui/x-data-grid-premium';
 import axios from "axios";
 // import Button from '@mui/material/Button';
@@ -211,6 +211,7 @@ export default function EventDisplayer() {
       field: "delete",
       headerName: "Delete",
       sortable: false,
+      filterable: false,
       renderCell: (params) => {
         const onClick = (e) => {
           // localStorage.setItem("eventID", JSON.stringify(params.id));
@@ -227,13 +228,14 @@ export default function EventDisplayer() {
   ];
 
   var columns = [
-    { field: 'title', headerName: 'Event Title', width: 100 },
+    { field: 'title', headerName: 'Event Title', width: 200 },
     { field: 'location', headerName: 'Location', width: 120 },
     {
       field: "attendees",
       width: 120,
       headerName: "Attendees",
       sortable: false,
+      filterable: false,
       renderCell: (params) => {
         const [open, setOpen] = React.useState(false);
         var thisRow = {};
@@ -304,6 +306,7 @@ export default function EventDisplayer() {
       field: "invite",
       headerName: "Invite",
       sortable: false,
+      filterable: false,
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
@@ -333,6 +336,7 @@ export default function EventDisplayer() {
       field: "edit",
       headerName: "Edit",
       sortable: false,
+      filterable: false,
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
@@ -362,6 +366,7 @@ export default function EventDisplayer() {
       field: "delete",
       headerName: "Delete",
       sortable: false,
+      filterable: false,
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
@@ -389,6 +394,7 @@ export default function EventDisplayer() {
       width: 80,
       headerName: "Details",
       sortable: false,
+      filterable: false,
       renderCell: (params) => {
         const [open, setOpen] = React.useState(false);
         var thisRow = {};
@@ -534,7 +540,7 @@ export default function EventDisplayer() {
   return (
     <>
       <div style={{ 
-        height: 400, 
+        height: 700, 
         width: '75%', 
         margin: 'auto'}}>
         <DataGrid
@@ -543,6 +549,7 @@ export default function EventDisplayer() {
           pageSize={10}
           rowsPerPageOptions={[10]}
           getRowId={(row) => row._id}
+          components={{ Toolbar: GridToolbar }}
         />
       </div>
     </>
