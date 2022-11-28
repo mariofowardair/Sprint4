@@ -15,6 +15,8 @@ const CustomInfoWindow = ({ position, close }) => {
     >
       <p>{position.title}</p>
       <p>
+        Location: {position.location}
+        <br />
         Latitude: {position.lat}
         <br />
         Longitude: {position.lng}
