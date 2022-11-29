@@ -35,8 +35,8 @@ const defaultValues = {
     max_attendees: "", //100
     is_invite_only: "", //false
     location: "", 
-    //startdate: "2022-01-01T00:00",
-    //enddate: "2022-01-01T00:00",
+    start_time: "2022-01-01T00:00",
+    end_time: "2022-01-01T00:00",
 };
 
 const Form = () => {
@@ -75,6 +75,8 @@ const Form = () => {
           max_attendees: formValues.max_attendees,
           is_invite_only: formValues.is_invite_only,
           location: formValues.location,        
+          start_time: formValues.start_time,
+          end_time: formValues.end_time,
         },
       };
   
@@ -180,7 +182,7 @@ const Form = () => {
                 required
                 fullWidth
                 id="datetime-input"
-                name="startdate"
+                name="start_time"
                 label="Start Date"
                 type="datetime-local"
                 defaultValue="2022-01-01T00:00"
@@ -188,7 +190,7 @@ const Form = () => {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                value={formValues.startdate}
+                value={formValues.start_time}
                 onChange={handleInputChange}
                 style={styles.textfield}
               />
@@ -198,7 +200,7 @@ const Form = () => {
               required
               fullWidth
               id="datetime-input"
-              name="enddate"
+              name="end_time"
               label="End Date"
               type="datetime-local"
               defaultValue="2022-01-01T00:00"
@@ -206,7 +208,7 @@ const Form = () => {
               InputLabelProps={{
                 shrink: true,
               }}
-              value={formValues.enddate}
+              value={formValues.end_time}
               onChange={handleInputChange}
               style={styles.textfield}
             />

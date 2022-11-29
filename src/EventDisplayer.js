@@ -442,6 +442,8 @@ export default function EventDisplayer() {
                   <br></br>
                   {`Start Time: ${JSON.parse(localStorage.getItem("rowData")).start_time}`}
                   <br></br>
+                  {`End Time: ${JSON.parse(localStorage.getItem("rowData")).end_time}`}
+                  <br></br>
                   {`Host Email: ${JSON.parse(localStorage.getItem("rowData")).host_email}`}
                   <br></br>
                   {`Details: ${JSON.parse(localStorage.getItem("rowData")).details}`}
