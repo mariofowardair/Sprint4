@@ -7,6 +7,8 @@ import axios from "axios";
 import { IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { ConstructionOutlined } from '@mui/icons-material';
+import ErrorIcon from '@mui/icons-material/Error';
+import Tooltip from '@mui/material/Tooltip';
 
 localStorage.setItem("rowData",
 JSON.stringify(
@@ -270,6 +272,22 @@ getData();
   };
 
   var columns = [
+    {
+      field: "has_conflict",
+      headerName: "",
+      width: 50,
+      renderCell: (params) => {
+        // console.log(params.getValue(params.id, "title"));
+        if(params.getValue(params.id, "has_conflict") == true){
+          return 
+            <Tooltip title="Overlapping time with another event!!" placement="bottom">
+              <ErrorIcon/>
+            </Tooltip>
+        }
+        return;
+        // return <Button onClick={event =>  window.location.href='/EditEvent'}>Edit</Button>;
+      }
+    },
     { field: 'title', headerName: 'Event Title', width: 100 },
     { field: 'num_attendees', headerName: 'Number Registered', width: 150 },
     { field: 'max_attendees', headerName: 'Max Capacity', width: 100 },
@@ -408,6 +426,8 @@ getData();
                   <br></br>
                   {`Start Time: ${JSON.parse(localStorage.getItem("rowData")).start_time}`}
                   <br></br>
+                  {`End Time: ${JSON.parse(localStorage.getItem("rowData")).end_time}`}
+                  <br></br>
                   {`Host Email: ${JSON.parse(localStorage.getItem("rowData")).host_email}`}
                   <br></br>
                   {`Details: ${JSON.parse(localStorage.getItem("rowData")).details}`}
@@ -427,6 +447,22 @@ getData();
     },
   ];
   var columns2 = [
+    {
+      field: "has_conflict",
+      headerName: "",
+      width: 50,
+      renderCell: (params) => {
+        // console.log(params.getValue(params.id, "title"));
+        if(params.getValue(params.id, "has_conflict") == true){
+          return 
+            <Tooltip title="Overlapping time with another event!!" placement="bottom">
+              <ErrorIcon/>
+            </Tooltip>
+        }
+        return;
+        // return <Button onClick={event =>  window.location.href='/EditEvent'}>Edit</Button>;
+      }
+    },
     { field: 'title', headerName: 'Event Title', width: 100 },
     { field: 'num_attendees', headerName: 'Number Registered', width: 150 },
     { field: 'max_attendees', headerName: 'Max Capacity', width: 100 },
@@ -541,6 +577,8 @@ getData();
                   <br></br>
                   {`Start Time: ${JSON.parse(localStorage.getItem("rowData")).start_time}`}
                   <br></br>
+                  {`End Time: ${JSON.parse(localStorage.getItem("rowData")).end_time}`}
+                  <br></br>
                   {`Host Email: ${JSON.parse(localStorage.getItem("rowData")).host_email}`}
                   <br></br>
                   {`Details: ${JSON.parse(localStorage.getItem("rowData")).details}`}
@@ -605,6 +643,7 @@ getData();
       // console.log(rows);
       var r = result.data;
       for(var i = 0; i < r.length; i++){
+        r[i]["has_conflict"] = false;
         r[i]["num_attendees"] = r[i].attendees.length + r[i].maybe.length;
         for(var j = 0; j < r[i].attendees.length; j++){
           if(r[i].attendees[j] == user){
@@ -623,6 +662,20 @@ getData();
           continue;
         }
         r[i]["status"] = "None";
+      }
+      for(var i = 0; i < r.length; i++){
+        if(r[i].status == "None"){
+          continue;
+        }
+        for(var j = i + 1; j < r.length; j++){
+          if(r[j].status == "None"){
+            continue;
+          }
+          if(r[i].start_time < r[j].end_time || r[j].start_time < r[i].end_time){
+            r[i]["has_conflict"] = true;
+            r[j]["has_conflict"] = true;
+          } 
+        }
       }
       setData(r);
   })
@@ -649,8 +702,10 @@ let r2 = await axios(configuration2)
 .then((result) => {
     console.log("yes");
     console.log(result);
+    var open = allData;
     var r = result.data;
       for(var i = 0; i < r.length; i++){
+        r[i]["has_conflict"] = false;
         r[i]["num_attendees"] = r[i].attendees.length + r[i].maybe.length;
         for(var j = 0; j < r[i].attendees.length; j++){
           console.log(r[i][j]);
@@ -671,6 +726,35 @@ let r2 = await axios(configuration2)
         }
         r[i]["status"] = "None";
       }
+      for(var i = 0; i < r.length; i++){
+        if(r[i].status == "None"){
+          continue;
+        }
+        for(var j = i + 1; j < r.length; j++){
+          if(r[j].status == "None"){
+            continue;
+          }
+          if(r[i].start_time < r[j].end_time || r[j].start_time < r[i].end_time){
+            r[i]["has_conflict"] = true;
+            r[j]["has_conflict"] = true;
+          } 
+        }
+      }
+      for(var i = 0; i < r.length; i++){
+        if(r[i].status == "None"){
+          continue;
+        }
+        for(var j = 0; j < open.length; j++){
+          if(open[j].status == "None"){
+            continue;
+          }
+          if(r[i].start_time < open[j].end_time || r[i].end_time > open[j].start_time ){
+            open[j]["has_conflict"] = true;
+            r[i]["has_conflict"] = true;
+          }
+        }
+      }
+    setData(open);
     setInvited(r);
 })
 .catch((error) => {
