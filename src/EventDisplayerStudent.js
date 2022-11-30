@@ -25,16 +25,33 @@ JSON.stringify(
 }
 ));
 
+function getTimeString(time){
+  var date = new Date(time);
+  // var date = time;
+  return date.toDateString() + ", "+ date.toTimeString().substring(0,5);
+}
 export default function EventDisplayerStudent() {
   const [data, setData] = useState([]);
+  const [selected, setSelected] = useState([]);
+  const apiRef = useGridApiRef();
   //const apiRef = useGridApiRef();
   // const [attending, setAttending] = useState([]);
   // const [maybe, setMaybe] = useState([]);
+  const onClickMap = (e) =>{
+    var selectedData = [];
+    console.log(selected);
+    for(var i = 0; i < selected.length; i++){
+      selectedData.push(findId(data, selected[i]));
+    }
+    localStorage.setItem("filteredData", JSON.stringify(selectedData));
+    console.log(selectedData);
+    
+  }
 
   function findId(data, id) {
     for (var i = 0; i < data.length; i++) {
         if (data[i]._id == id) {
-            return(data[i]);
+            return data[i];
         }
     }
   }
@@ -226,6 +243,7 @@ export default function EventDisplayerStudent() {
   var columns = [
     {
       field: "has_conflict",
+      filterable: false,
       headerName: "",
       width: 50,
       renderCell: (params) => {
@@ -241,9 +259,12 @@ export default function EventDisplayerStudent() {
       }
     },
     { field: 'title', headerName: 'Event Title', width: 200 },
-    { field: 'status', headerName: 'Status', width: 200 },
-    { field: 'num_attendees', headerName: 'Number Registered', width: 150 },
-    { field: 'max_attendees', headerName: 'Max Capacity', width: 100 },
+    { field: 'start_time', headerName: 'Start Time', width: 200, hide: true, valueGetter: ({ value }) => value && new Date(value), type: 'date'},
+    { field: 'readable_start_time', headerName: 'Start Time', width: 200, filterable: false},
+    { field: 'end_time',headerName: 'End Time', width: 100, hide: true, type: "date", valueGetter: ({ value }) => value && new Date(value),},
+    { field: 'status', headerName: 'Status', width: 200, type: 'singleSelect' },
+    { field: 'num_attendees', headerName: 'Number Registered', width: 150, type: "number" },
+    { field: 'max_attendees', headerName: 'Max Capacity', width: 100, type: "number" },
     {
       field: "asd",
       headerName: "Change Status",
@@ -427,6 +448,7 @@ export default function EventDisplayerStudent() {
       for(var i = 0; i < r.length; i++){
         r[i]["num_attendees"] = r[i].attendees.length + r[i].maybe.length;
         r[i]["status"] = "Attending";
+        r[i]["readable_start_time"] = getTimeString(r[i]["start_time"]);
         DATA.push(r[i]);
       }
       // setData(DATA);
@@ -498,14 +520,35 @@ axios(configuration2)
     <>
       <div style={{ height: 700, width: '100%' }}>
         <DataGrid
+          checkboxSelection
           rows={data}
           columns={columns}
           pageSize={10}
           rowsPerPageOptions={[10]}
           getRowId={(row) => row._id}
           components={{ Toolbar: GridToolbar }}
+          initialState={{
+            ...data.initialState,
+            filter: {
+              filterModel: {
+                items: [
+                  {
+                    columnField: 'rating',
+                    operatorValue: '>',
+                    value: '2.5',
+                  },
+                ],
+              },
+            },
+          }}
+          onSelectionModelChange={(newSelection) => {
+            setSelected(newSelection);
+          }}
         />
       </div>
+      <Button onClick = {onClickMap} variant="contained">
+                        View Map
+                    </Button> <br/> <br />
     </>
   );
 }
