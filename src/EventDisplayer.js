@@ -555,6 +555,10 @@ export default function EventDisplayer() {
           components={{ Toolbar: GridToolbar }}
         />
       </div>
+
+      <Button href="/map" variant="contained">
+                        View Map
+                    </Button> <br/> <br />
     </>
   );
 }
