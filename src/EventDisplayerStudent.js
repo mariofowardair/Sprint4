@@ -7,6 +7,8 @@ import axios from "axios";
 import { IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { ConstructionOutlined, JavascriptOutlined } from '@mui/icons-material';
+import ErrorIcon from '@mui/icons-material/Error';
+import Tooltip from '@mui/material/Tooltip';
 
 localStorage.setItem("rowData",
 JSON.stringify(
@@ -24,9 +26,10 @@ JSON.stringify(
 ));
 
 export default function EventDisplayerStudent() {
+  const [data, setData] = useState([]);
   //const apiRef = useGridApiRef();
-  const [attending, setAttending] = useState([]);
-  const [maybe, setMaybe] = useState([]);
+  // const [attending, setAttending] = useState([]);
+  // const [maybe, setMaybe] = useState([]);
 
   function findId(data, id) {
     for (var i = 0; i < data.length; i++) {
@@ -220,144 +223,30 @@ export default function EventDisplayerStudent() {
     getData();
   });
   };
-
   var columns = [
-    { field: 'title', headerName: 'Event Title', width: 200 },
-    { field: 'num_attendees', headerName: 'Number Registered', width: 150 },
-    { field: 'max_attendees', headerName: 'Max Capacity', width: 100 },
     {
-      field: "maybe",
-      headerName: "Maybe",
-      sortable: false,
-      filterable: false,
+      field: "has_conflict",
+      headerName: "",
+      width: 50,
       renderCell: (params) => {
-        const onClick = (e) => {
-          e.stopPropagation(); // don't select this row after clicking
-  
-          const api = params.api;
-          var thisRow = {};
-  
-          api
-            .getAllColumns()
-            .filter((c) => c.field !== "__check__" && !!c)
-            .forEach(
-              (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-            );
-          
-          thisRow["id"] = params.id;
-          localStorage.setItem("eventID", JSON.stringify(params.id));
-          handleMaybe(params.id);
-          return;
-          // return alert(JSON.stringify(thisRow, null, 4));
-        };
-  
-        return <Button onClick={onClick}>Maybe</Button>;
+        // console.log(params.getValue(params.id, "title"));
+        if(params.getValue(params.id, "has_conflict")){
+          return (
+            <Tooltip title="Overlapping time with another event!!" placement="bottom">
+              <ErrorIcon/>
+            </Tooltip>);
+        }
+        return <p/>;
         // return <Button onClick={event =>  window.location.href='/EditEvent'}>Edit</Button>;
       }
     },
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      filterable: false,
-      renderCell: (params) => {
-        const onClick = (e) => {
-          e.stopPropagation(); // don't select this row after clicking
-  
-          const api = params.api;
-          const thisRow = {};
-  
-          api
-            .getAllColumns()
-            .filter((c) => c.field !== "__check__" && !!c)
-            .forEach(
-              (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-            );
-          
-          thisRow["id"] = params.getValue(params.id, "id");
-          handleDeleteAttending(params.id);
-          return;
-        };
-  
-        return <Button onClick={onClick}>Del</Button>;
-      }
-    },
-    {
-      field: "specs",
-      width: 80,
-      headerName: "Details",
-      sortable: false,
-      filterable: false,
-      renderCell: (params) => {
-        const [open, setOpen] = React.useState(false);
-        var thisRow = {};
-        const handleClickOpen = (e) => {
-          setOpen(true);
-          e.stopPropagation(); // don't select this row after clicking
-  
-          const api = params.api;
-  
-          api
-            .getAllColumns()
-            .filter((c) => c.field !== "__check__" && !!c)
-            .forEach(
-              (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-            );
-          thisRow["id"] = params.getValue(params.id, "id");
-          thisRow = findId(attending, params.id);
-          localStorage.setItem("rowData", JSON.stringify(thisRow));
-        };
-  
-        const handleClose = () => {
-          setOpen(false);
-        };
-        return (
-          <>
-            <Button onClick={handleClickOpen}>
-              <IconButton>
-                <MoreVertIcon/>
-              </IconButton>
-            </Button>
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {JSON.parse(localStorage.getItem("rowData")).title}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  {`Location: ${JSON.parse(localStorage.getItem("rowData")).location}`}
-                  <br></br>
-                  {`Start Time: ${JSON.parse(localStorage.getItem("rowData")).start_time}`}
-                  <br></br>
-                  {`Host Email: ${JSON.parse(localStorage.getItem("rowData")).host_email}`}
-                  <br></br>
-                  {`Details: ${JSON.parse(localStorage.getItem("rowData")).details}`}
-                  <br></br>
-                  {`Guest Capacity: ${JSON.parse(localStorage.getItem("rowData")).max_attendees}`}
-                  <br></br>
-                  {`Invite Only: ${JSON.parse(localStorage.getItem("rowData")).is_invite_only}`}
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Exit</Button>
-              </DialogActions>
-            </Dialog>
-          </>
-        );
-      }
-    },
-  ];
-  var columns2 = [
-    { field: 'title', headerName: 'Event Title', width: 100 },
+    { field: 'title', headerName: 'Event Title', width: 200 },
+    { field: 'status', headerName: 'Status', width: 200 },
     { field: 'num_attendees', headerName: 'Number Registered', width: 150 },
     { field: 'max_attendees', headerName: 'Max Capacity', width: 100 },
     {
-      field: "RSVP",
-      headerName: "RSVP",
+      field: "asd",
+      headerName: "Change Status",
       sortable: false,
       filterable: false,
       renderCell: (params) => {
@@ -376,12 +265,17 @@ export default function EventDisplayerStudent() {
           
           thisRow["id"] = params.id;
           localStorage.setItem("eventID", JSON.stringify(params.id));
-          handleRSVP(params.id);
+          if(thisRow["id"]["status"] == "Maybe"){
+            handleRSVP(params.id);
+          }else{
+            handleMaybe(params.id);
+          }
+          
           return;
           // return alert(JSON.stringify(thisRow, null, 4));
         };
   
-        return <Button onClick={onClick}>RSVP</Button>;
+        return <Button onClick={onClick}>{(params.getValue(params.id, "status") == "Maybe")? "RSVP": "Maybe"}</Button>;
         // return <Button onClick={event =>  window.location.href='/EditEvent'}>Edit</Button>;
       }
     },
@@ -422,7 +316,6 @@ export default function EventDisplayerStudent() {
         const [open, setOpen] = React.useState(false);
         var thisRow = {};
         const handleClickOpen = (e) => {
-          setOpen(true);
           e.stopPropagation(); // don't select this row after clicking
   
           const api = params.api;
@@ -434,10 +327,9 @@ export default function EventDisplayerStudent() {
               (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
             );
           thisRow["id"] = params.getValue(params.id, "id");
-          thisRow = findId(maybe, params.id);
+          thisRow = findId(data, params.id);
           localStorage.setItem("rowData", JSON.stringify(thisRow));
-          
-  
+          setOpen(true);
         };
   
         const handleClose = () => {
@@ -464,6 +356,8 @@ export default function EventDisplayerStudent() {
                   {`Location: ${JSON.parse(localStorage.getItem("rowData")).location}`}
                   <br></br>
                   {`Start Time: ${JSON.parse(localStorage.getItem("rowData")).start_time}`}
+                  <br></br>
+                  {`End Time: ${JSON.parse(localStorage.getItem("rowData")).end_time}`}
                   <br></br>
                   {`Host Email: ${JSON.parse(localStorage.getItem("rowData")).host_email}`}
                   <br></br>
@@ -505,7 +399,8 @@ export default function EventDisplayerStudent() {
     getData();
   }, []);
 
-  async function getData() {
+  function getData() {
+    var DATA = [];
     const configuration = {
       method: "post",
       url: "http://localhost:3000/returnJoinedEvent",
@@ -518,7 +413,7 @@ export default function EventDisplayerStudent() {
   
   console.log(JSON.parse(localStorage.getItem("user")));
   // make the API call
-  let r = await axios(configuration)
+  axios(configuration)
   .then((result) => {
       console.log("yes");
       console.log(result);
@@ -529,11 +424,12 @@ export default function EventDisplayerStudent() {
       // console.log(rows);
       var r = result.data;
       console.log(r);
-      console.log(attending);
       for(var i = 0; i < r.length; i++){
         r[i]["num_attendees"] = r[i].attendees.length + r[i].maybe.length;
+        r[i]["status"] = "Attending";
+        DATA.push(r[i]);
       }
-      setAttending(r);
+      // setData(DATA);
       // setAttending(result.data);
   })
   .catch((error) => {
@@ -556,7 +452,7 @@ JSON.parse(localStorage.getItem("user"))
 
 console.log(JSON.parse(localStorage.getItem("user")));
 // make the API call
-let r2 = await axios(configuration2)
+axios(configuration2)
 .then((result) => {
     console.log("yes");
     console.log(result);
@@ -568,8 +464,21 @@ let r2 = await axios(configuration2)
     var r = result.data;
     for(var i = 0; i < r.length; i++){
       r[i]["num_attendees"] = r[i].attendees.length + r[i].maybe.length;
+      r[i]["status"] = "Maybe";
+      DATA.push(r[i]);
     }
-    setMaybe(r);
+    for(var i = 0; i < DATA.length; i++){
+      DATA[i]["has_conflict"] = false;
+    }
+    for(var i = 0; i < DATA.length; i++){
+      for(var j = i + 1; j < DATA.length; j++){
+        if((DATA[i].end_time > DATA[j].start_time && DATA[i].start_time < DATA[j].start_time) || (DATA[j].end_time > DATA[i].start_time && DATA[j].start_time < DATA[i].start_time)){
+          DATA[i]["has_conflict"] = true;
+          DATA[j]["has_conflict"] = true;
+        }
+      }
+    }
+    setData(DATA);
 })
 .catch((error) => {
     console.info(error);
@@ -580,39 +489,17 @@ let r2 = await axios(configuration2)
   }
 
   if (loading) return "Loading...";
-  if (error) return "Error!";
+  if (error){
+    console.log(error);
+    return "Error!";
+  }
 
-  // <pre>{JSON.stringify(data, null, 2)}</pre>
-  /*return (
-    <>
-      <div style={{ height: 400, width: '100%' }}>
-        <DataGrid
-          {...data}
-          apiRef={apiRef}
-          loading={loading}
-          disableSelectionOnClick
-          initialState={initialState}
-          experimentalFeatures={{ newEditingApi: true }}
-        />
-      </div>
-    </>
-  )*/
   return (
     <>
-      <div style={{ height: 400, width: '100%' }}>
-        <p>Attending Events:</p>
+      <div style={{ height: 700, width: '100%' }}>
         <DataGrid
-          rows={attending}
+          rows={data}
           columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
-          getRowId={(row) => row._id}
-          components={{ Toolbar: GridToolbar }}
-        />
-        <p>Maybe Attending Events:</p>
-        <DataGrid
-          rows={maybe}
-          columns={columns2}
           pageSize={10}
           rowsPerPageOptions={[10]}
           getRowId={(row) => row._id}
