@@ -34,7 +34,6 @@ function getTimeString(time){
 export default function EventDisplayerStudent() {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState([]);
-  const apiRef = useGridApiRef();
   //const apiRef = useGridApiRef();
   // const [attending, setAttending] = useState([]);
   // const [maybe, setMaybe] = useState([]);
@@ -263,7 +262,10 @@ export default function EventDisplayerStudent() {
     { field: 'start_time', headerName: 'Start Time', width: 200, hide: true, valueGetter: ({ value }) => value && new Date(value), type: 'date'},
     { field: 'readable_start_time', headerName: 'Start Time', width: 200, filterable: false},
     { field: 'end_time',headerName: 'End Time', width: 100, hide: true, type: "date", valueGetter: ({ value }) => value && new Date(value),},
-    { field: 'status', headerName: 'Status', width: 200, type: 'singleSelect' },
+    { field: 'status', headerName: 'Status', width: 200, type: 'singleSelect',
+    valueOptions: (params) => {
+      return ["Attending", "Maybe"];
+    },},
     { field: 'num_attendees', headerName: 'Number Registered', width: 150, type: "number" },
     { field: 'max_attendees', headerName: 'Max Capacity', width: 100, type: "number" },
     {

@@ -10,6 +10,12 @@ import { ConstructionOutlined, Email } from '@mui/icons-material';
 
 var global_data = [];
 
+function getTimeString(time){
+  var date = new Date(time);
+  // var date = time;
+  return date.toDateString() + ", "+ date.toTimeString().substring(0,5);
+}
+
 localStorage.setItem("rowData",
 JSON.stringify(
 {
@@ -36,7 +42,21 @@ const dialog_styles = {
 export default function EventDisplayer() {
   const [data, setData] = useState([]);
   const [attendeeData, setAttendee] = useState([]);
-
+  const [selected, setSelected] = useState([]);
+  //const apiRef = useGridApiRef();
+  // const [attending, setAttending] = useState([]);
+  // const [maybe, setMaybe] = useState([]);
+  const onClickMap = (e) =>{
+    var selectedData = [];
+    console.log(selected);
+    for(var i = 0; i < selected.length; i++){
+      selectedData.push(findId(data, selected[i]));
+    }
+    localStorage.setItem("filteredData", JSON.stringify(selectedData));
+    console.log(selectedData);
+    window.location.href = '/map'; 
+  }
+  
   function findId(id) {
     console.log("DATA RN: ");
     console.log(data);
@@ -229,8 +249,21 @@ export default function EventDisplayer() {
 
   var columns = [
     { field: 'title', headerName: 'Event Title', width: 200 },
-    { field: 'location', headerName: 'Location', width: 120 },
-    { field: 'is_invite_only', headerName: 'Invite Only', width: 120, filterable: true },
+    { field: 'location', headerName: 'Location', width: 100, type: "singleSelect" ,
+    valueOptions: (params) => {
+      return ["Klaus", "CULC", "Tech Green", "CRC", "Exhibition Hall", "Student Center", "Ferst Art Center", "Bobby Dodd Stadium"];
+    },
+  },
+    { field: 'start_time', headerName: 'Start Time', width: 200, hide: true, valueGetter: ({ value }) => value && new Date(value), type: 'date'},
+    { field: 'readable_start_time', headerName: 'Start Time', width: 200, filterable: false},
+    { field: 'end_time',headerName: 'End Time', width: 100, hide: true, type: "date", valueGetter: ({ value }) => value && new Date(value),},
+    { field: 'max_attendees', headerName: 'Capacity', width: 80, type: "number" },
+    { field: 'is_invite_only', headerName: 'Invite Only', width: 120, filterable: true, type: "singleSelect", 
+    valueOptions: (params) => {
+      return ["true", "false"];
+    },
+    valueGetter: ({ value }) => value.toString()
+    },
     {
       field: "attendees",
       width: 120,
@@ -511,7 +544,11 @@ export default function EventDisplayer() {
       // setLoaded(true);
       console.log("DONEEEEE");
       // console.log(rows);
-      setData(result.data);
+      var r = result.data;
+      for(var i = 0; i < r.length; i++){
+        r[i]["readable_start_time"] = getTimeString(r[i]["start_time"]);
+      }
+      setData(r);
       global_data = result.data;
   })
   .catch((error) => {
@@ -544,9 +581,10 @@ export default function EventDisplayer() {
     <>
       <div style={{ 
         height: 700, 
-        width: '75%', 
+        width: '100%', 
         margin: 'auto'}}>
         <DataGrid
+          checkboxSelection
           rows={data}
           columns={columns}
           pageSize={10}
