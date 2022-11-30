@@ -31,6 +31,8 @@ export default function Map() {
 
   useEffect(() => {
     console.log("CURRENT HOST:" + localStorage.getItem("user") )
+    console.log("LOCAL STORAGEE")
+    console.log(JSON.parse(localStorage.getItem("filteredData")));
     getData();
   }, []);
 
@@ -42,14 +44,16 @@ export default function Map() {
       //     user: JSON.parse(localStorage.getItem("user")),
       // }
       };
-  console.log("CURRENT HOST:" + localStorage.getItem("user") )
-  JSON.parse(localStorage.getItem("user"))
+  //console.log("CURRENT HOST:" + localStorage.getItem("user") )
+  //console.log("LOCAL STORAGEE")
+  //JSON.parse(localStorage.getItem("user"))
   
-  console.log(JSON.parse(localStorage.getItem("user")));
+  //console.log(localStorage.getItem("user"));
   // make the API call
   // useEffect(() => {
   //   getData();
   // }, []);
+  /*
   let r = await axios(configuration)
   .then((result) => {
       console.log("yes");
@@ -59,29 +63,34 @@ export default function Map() {
       // setLoaded(true);
       console.log("DONEEEEE");
       // console.log(rows);
+      */
+      console.log("check");
+      let result = JSON.parse(localStorage.getItem("filteredData"));
+      console.log(result.length);
+
       const tempArr = [];
 
-      for (var i = 0; i < result.data.length; i++) {
+      for (var i = 0; i < result.length; i++) {
         var tempLat = 0;
         var tempLng = 0;
         for (var j = 0; j < points.length; j++) {
           //console.log(result.data[i].location)
-          if (result.data[i].location == points[j].location) {
+          if (result[i].location == points[j].location) {
             tempLat = points[j].lat;
             tempLng = points[j].lng;
 
             tempArr.push({
               id: j,
-              title: result.data[i].title,
-              location: result.data[i].location,
+              title: result[i].title,
+              location: result[i].location,
               lat: tempLat,
               lng: tempLng,
-              details: result.data[i].details,
-              host_email: result.data[i].host_email,
-              is_invite_only: JSON.stringify(result.data[i].is_invite_only),
-              max_attendees: result.data[i].max_attendees,
-              start_time: result.data[i].start_time,
-              end_time: result.data[i].end_time,
+              details: result[i].details,
+              host_email: result[i].host_email,
+              is_invite_only: JSON.stringify(result[i].is_invite_only),
+              max_attendees: result[i].max_attendees,
+              start_time: result[i].start_time,
+              end_time: result[i].end_time,
             })
     
             console.log(tempArr)
@@ -103,6 +112,7 @@ export default function Map() {
 
       //setData(result.data);
       // global_data = result.data;
+      /*
   })
   .catch((error) => {
       console.info(error);
@@ -112,7 +122,9 @@ export default function Map() {
   });
   }
 
-  
+  */
+}
+
   const [selectedCenter, setSelectedCenter] = useState(null);
 
   const handleShowInfo = (location) => {

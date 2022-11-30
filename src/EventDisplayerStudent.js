@@ -9,6 +9,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { ConstructionOutlined, JavascriptOutlined } from '@mui/icons-material';
 import ErrorIcon from '@mui/icons-material/Error';
 import Tooltip from '@mui/material/Tooltip';
+import { useNavigate } from "react-router-dom";
 
 localStorage.setItem("rowData",
 JSON.stringify(
@@ -45,7 +46,7 @@ export default function EventDisplayerStudent() {
     }
     localStorage.setItem("filteredData", JSON.stringify(selectedData));
     console.log(selectedData);
-    
+    window.location.href = '/map'; 
   }
 
   function findId(data, id) {
