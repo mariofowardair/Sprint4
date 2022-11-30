@@ -594,7 +594,7 @@ export default function EventDisplayer() {
         />
       </div>
 
-      <Button href="/map" variant="contained">
+      <Button onClick = {onClickMap} variant="contained">
                         View Map
                     </Button> <br/> <br />
     </>
