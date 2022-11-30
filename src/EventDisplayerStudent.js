@@ -323,7 +323,12 @@ export default function EventDisplayerStudent() {
             );
           
           thisRow["id"] = params.getValue(params.id, "id");
-          handleDeleteMaybe(params.id);
+          if(params.getValue(params.id, "status") == "Maybe"){
+            handleDeleteMaybe(params.id);
+          }else{
+            handleDeleteAttending(params.id);
+          }
+          
           return;
         };
   
