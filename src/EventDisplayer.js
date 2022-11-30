@@ -54,7 +54,7 @@ export default function EventDisplayer() {
     }
     localStorage.setItem("filteredData", JSON.stringify(selectedData));
     console.log(selectedData);
-    // window.location.href = '/map'; 
+    window.location.href = '/map'; 
   }
   
   function findId(data, id) {
