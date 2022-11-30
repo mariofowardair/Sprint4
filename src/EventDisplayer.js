@@ -591,6 +591,9 @@ export default function EventDisplayer() {
           rowsPerPageOptions={[10]}
           getRowId={(row) => row._id}
           components={{ Toolbar: GridToolbar }}
+          onSelectionModelChange={(newSelection) => {
+            setSelected(newSelection);
+          }}
         />
       </div>
 
